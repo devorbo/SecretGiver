@@ -12,47 +12,25 @@ st.markdown("""
     <style>
     @import url('                                                       ;400;600&display=swap');
     
-    html, body, [data-testid="stAppViewContainer"] {
-        background-color: #fdf2f8;
+    /* הגדרות כלליות ורקע */
+    .stApp {
+        background-color: #fdf2f8 !important;
         font-family: 'Inter', sans-serif;
+    }
+    
+    [data-testid="stAppViewContainer"] {
+        background-color: #fdf2f8 !important;
         direction: rtl;
         text-align: right;
     }
-    
-    .stButton button {
-        background-color: #ec4899;
-        color: white;
-        border-radius: 15px;
-        border: none;
-        padding: 0.5rem 2rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-    
-    .stButton button:hover {
-        background-color: #db2777;
-        box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.4);
-        transform: translateY(-2px);
-    }
-    
-    .stTextInput input {
-        border-radius: 12px;
-        border: 1px solid #fbcfe8;
-        padding: 10px;
-        background-color: rgba(255, 255, 255, 0.8);
-    }
-    
-    .stTextInput label {
-        color: #9d174d;
-        font-weight: 500;
-    }
-    
+
+    /* עיצוב הכותרות */
     h1 {
-        color: #831843;
-        font-weight: 300;
-        letter-spacing: -1px;
-        text-align: center;
+        color: #831843 !important;
+        font-weight: 300 !important;
+        letter-spacing: -1px !important;
+        text-align: center !important;
+        padding-top: 2rem;
     }
     
     .subtitle {
@@ -61,17 +39,72 @@ st.markdown("""
         font-size: 0.9rem;
         text-transform: uppercase;
         letter-spacing: 2px;
-        margin-bottom: 2rem;
+        margin-bottom: 3rem;
         opacity: 0.7;
+        font-weight: 600;
+    }
+
+    /* עיצוב כרטיסי המשתתפים */
+    [data-testid="stHorizontalBlock"] {
+        background-color: rgba(255, 255, 255, 0.7) !important;
+        padding: 1.5rem !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(251, 207, 232, 0.5) !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* עיצוב שדות הקלט */
+    .stTextInput input {
+        border-radius: 12px !important;
+        border: 1px solid #fbcfe8 !important;
+        padding: 12px !important;
+        background-color: white !important;
+        text-align: right !important;
     }
     
-    div[data-testid="stVerticalBlock"] > div {
-        background-color: rgba(255, 255, 255, 0.6);
-        padding: 1.5rem;
-        border-radius: 24px;
-        border: 1px solid rgba(251, 207, 232, 0.5);
-        backdrop-filter: blur(10px);
-        margin-bottom: 1rem;
+    .stTextInput label {
+        color: #9d174d !important;
+        font-weight: 600 !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* עיצוב כפתורים */
+    .stButton button {
+        background-color: #ec4899 !important;
+        color: white !important;
+        border-radius: 12px !important;
+        border: none !important;
+        padding: 0.6rem 2rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+        height: 3rem !important;
+    }
+    
+    .stButton button:hover {
+        background-color: #db2777 !important;
+        box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.3) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* כפתור הוספת משתתף - עיצוב שונה */
+    div[data-testid="stColumn"]:first-child .stButton button {
+        background-color: transparent !important;
+        color: #ec4899 !important;
+        border: 2px dashed #fbcfe8 !important;
+    }
+    
+    div[data-testid="stColumn"]:first-child .stButton button:hover {
+        background-color: #fff1f2 !important;
+        border-color: #ec4899 !important;
+    }
+
+    /* התאמות לנייד */
+    @media (max-width: 640px) {
+        [data-testid="stHorizontalBlock"] {
+            padding: 1rem !important;
+        }
     }
     </style>
     """, unsafe_allow_html=True)
