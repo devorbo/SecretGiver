@@ -7,45 +7,93 @@ from email.mime.multipart import MIMEMultipart
 # הגדרות דף
 st.set_page_config(page_title="משחק הגמד והענק", page_icon="🎁", layout="centered")
 
-# הזרקת עיצוב CSS למראה וורוד ומעוגל (כמו ב-AI Studio)
+# עיצוב מותאם אישית בסגנון הוורוד/יוקרתי הקודם
 st.markdown("""
     <style>
-    .stApp { background-color: #fffafd; }
-    .main-title { color: #702a4d; text-align: center; font-family: 'Segoe UI', sans-serif; font-size: 3rem; font-weight: bold; margin-bottom: 0px; }
-    .sub-title { color: #d84d8d; text-align: center; font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; margin-top: 0px; margin-bottom: 30px; }
+    @import url('                                                       ;400;600&display=swap');
     
-    /* עיצוב כפתור ביצוע הגרלה */
-    div.stButton > button:first-child { 
-        background-color: #f43f8e; color: white; border-radius: 20px; border: none; 
-        padding: 15px 30px; font-size: 1.1rem; width: 100%; font-weight: bold;
+    html, body, [data-testid="stAppViewContainer"] {
+        background-color: #fdf2f8;
+        font-family: 'Inter', sans-serif;
+        direction: rtl;
+        text-align: right;
     }
     
-    /* עיצוב כפתור הוספת משתתף */
-    button[kind="secondary"] { 
-        border-radius: 20px; border: 1px dashed #f43f8e; color: #f43f8e; 
-        background-color: white; width: 100%; 
+    .stButton button {
+        background-color: #ec4899;
+        color: white;
+        border-radius: 15px;
+        border: none;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
     }
-
-    /* עיצוב תיבות הקלט */
-    .stTextInput input { border-radius: 15px !important; border: 1px solid #fce4ec !important; text-align: right; }
+    
+    .stButton button:hover {
+        background-color: #db2777;
+        box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    .stTextInput input {
+        border-radius: 12px;
+        border: 1px solid #fbcfe8;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .stTextInput label {
+        color: #9d174d;
+        font-weight: 500;
+    }
+    
+    h1 {
+        color: #831843;
+        font-weight: 300;
+        letter-spacing: -1px;
+        text-align: center;
+    }
+    
+    .subtitle {
+        color: #be185d;
+        text-align: center;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 2rem;
+        opacity: 0.7;
+    }
+    
+    div[data-testid="stVerticalBlock"] > div {
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 1.5rem;
+        border-radius: 24px;
+        border: 1px solid rgba(251, 207, 232, 0.5);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1rem;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# פונקציה לשליחת מייל דרך המפתחות שב-Secrets 
+# פונקציה לשליחת מייל
 def send_email(giver_name, giver_email, receiver_name):
     try:
-        smtp_config = st.secrets["smtp"] # שימוש בהגדרות המאובטחות 
+        smtp_config = st.secrets["smtp"]
         msg = MIMEMultipart()
         msg['From'] = smtp_config["from_email"]
         msg['To'] = giver_email
         msg['Subject'] = "הגרלת הגמד והענק - מי הענק שלך?"
         
         html = f"""
-        <div dir="rtl" style="font-family: sans-serif; text-align: right; padding: 20px; border: 1px solid #fce4ec; border-radius: 15px;">
-            <h2 style="color: #d84d8d;">היי {giver_name}!</h2>
-            <p>ההגרלה בוצעה בהצלחה.</p>
-            <p style="font-size: 1.3em;">האדם שאתה הגמד שלו הוא: <strong style="color: #f43f8e;">{receiver_name}</strong></p>
-            <p>שיהיה בהצלחה ובהנאה!</p>
+        <div dir="rtl" style="font-family: sans-serif; line-height: 1.6; text-align: right;">
+            <p>היי <strong>{giver_name}</strong>!</p>
+            <p>הגרלת הגמד והענק הסתיימה ונקבע כי:</p>
+            <p style="font-size: 1.2em; color: #831843; background-color: #fdf2f8; padding: 15px; border-radius: 10px; display: inline-block; border: 1px solid #fbcfe8;">
+                אתה הגמד של: <strong>{receiver_name}</strong>
+            </p>
+            <p>זה הזמן להתחיל לחשוב על מתנה מפנקת...</p>
+            <p>בהצלחה!</p>
         </div>
         """
         msg.attach(MIMEText(html, 'html'))
@@ -56,52 +104,45 @@ def send_email(giver_name, giver_email, receiver_name):
             server.send_message(msg)
         return True
     except Exception as e:
-        st.error(f"שגיאה בשליחה ל-{giver_email}: {e}")
+        st.error(f"שגיאה בשליחת מייל ל-{giver_email}: {e}")
         return False
 
-# כותרות האתר 
-st.markdown('<h1 class="main-title">משחק הגמד והענק</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">ארגנו את החלפת המתנות שלכם בקלות ובנעימות</p>', unsafe_allow_html=True)
+st.markdown('<h1>משחק הגמד והענק</h1>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">ארגנו את החלפת המתנות שלכם בקלות ובנעימות</p>', unsafe_allow_html=True)
 
-# אתחול רשימת המשתתפים (תיקון ה-KeyError)
 if 'participants' not in st.session_state:
     st.session_state.participants = [{"name": "", "email": ""}, {"name": "", "email": ""}, {"name": "", "email": ""}]
 
 def add_participant():
     st.session_state.participants.append({"name": "", "email": ""})
 
-# תצוגת הזנת נתונים
-for i in range(len(st.session_state.participants)):
+# הצגת המשתתפים
+for i, p in enumerate(st.session_state.participants):
     col1, col2 = st.columns(2)
     with col1:
-        st.session_state.participants[i]["name"] = st.text_input("שם", value=st.session_state.participants[i]["name"], key=f"name_{i}", placeholder="הכנס שם...")
+        st.session_state.participants[i]["name"] = st.text_input(f"שם {i+1}", value=p["name"], key=f"name_{i}")
     with col2:
-        st.session_state.participants[i]["email"] = st.text_input("אימייל", value=st.session_state.participants[i]["email"], key=f"email_{i}", placeholder="הכנס אימייל...")
+        st.session_state.participants[i]["email"] = st.text_input(f"אימייל {i+1}", value=p["email"], key=f"email_{i}")
 
-st.button("הוספת משתתף +", on_click=add_participant)
-
-if st.button("בצע הגרלה ושלח מיילים ✈️"):
-    # סינון רק משתתפים עם נתונים מלאים
-    valid_p = [p for p in st.session_state.participants if p["name"].strip() and p["email"].strip()]
-    
-    if len(valid_p) < 2:
-        st.warning("יש להזין לפחות שני משתתפים כדי להתחיל.")
-    else:
-        givers = valid_p[:]
-        receivers = valid_p[:]
-        
-        # הגרלה שמוודאת שאף אחד לא מקבל את עצמו
-        max_attempts = 100
-        for _ in range(max_attempts):
+col_add, col_draw = st.columns(2)
+with col_add:
+    st.button("➕ הוספת משתתף", on_click=add_participant)
+with col_draw:
+    if st.button("🚀 בצע הגרלה ושלח מיילים"):
+        active = [p for p in st.session_state.participants if p["name"].strip() and p["email"].strip()]
+        if len(active) < 2:
+            st.error("נא להזין לפחות 2 משתתפים.")
+        else:
+            receivers = active[:]
             random.shuffle(receivers)
-            if all(givers[i]["email"] != receivers[i]["email"] for i in range(len(givers))):
-                break
-        
-        with st.spinner("שולח הודעות סודיות..."):
-            count = 0
-            for i in range(len(givers)):
-                if send_email(givers[i]["name"], givers[i]["email"], receivers[i]["name"]):
-                    count += 1
-            
-            if count == len(givers):
-                st.success(f"הסתיים בהצלחה! {count} מיילים נשלחו.")
+            if any(active[i]["email"] == receivers[i]["email"] for i in range(len(active))):
+                receivers = receivers[1:] + [receivers[0]]
+                
+            with st.spinner("שולח מיילים..."):
+                success = 0
+                for i in range(len(active)):
+                    if send_email(active[i]["name"], active[i]["email"], receivers[i]["name"]):
+                        success += 1
+                if success == len(active):
+                    st.success("ההגרלה הסתיימה! המיילים נשלחו בהצלחה.")
+                    st.balloons()
